@@ -10,6 +10,7 @@ default:
   langfuse_secret_key: "@format {env[LANGFUSE_SECRET_KEY]}"
   langfuse_host: "@format {env[LANGFUSE_HOST]}"
   database_url: "@format {env[DATABASE_URL]}"
+  model_name: "gpt-4o-mini"
 
   qdrant:
     url: "@format {env[QDRANT_URL]}"
@@ -19,7 +20,7 @@ development:
   env: "development"
   debug: true
   database_url: "@format {env[DATABASE_URL]}"
-  model_name: "gpt-4o"
+  model_name: "gpt-4o-mini"
   qdrant:
     url: "@format {env[QDRANT_URL]}"
 
@@ -27,7 +28,7 @@ production:
   env: "production"
   debug: false
   database_url: "@format {env[DATABASE_URL]}"
-  model_name: "gpt-4o"
+  model_name: "gpt-4o-mini"
 
   qdrant:
     url: "@format {env[QDRANT_URL]}"

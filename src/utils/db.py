@@ -1,6 +1,7 @@
 import logging
 import uuid
 from datetime import datetime, date, timedelta
+from functools import lru_cache
 from typing import Any, Dict
 
 from qdrant_client import QdrantClient
@@ -12,6 +13,9 @@ from src.utils.custom_logging import setup_logging
 
 # Set up logging system
 setup_logging()
+
+# Cache for Qdrant search results (TTL: 5 minutes)
+_search_cache = {}
 
 
 def get_db_session():
@@ -209,7 +213,7 @@ def search_qdrant(
     user_input: str,
     embedding_model: Any,
     collection_name: str = "shipping_information",
-    limit: int = 3,
+    limit: int = 1,
     query_vector: Any = None,
 ) -> Dict[str, str]:
     """
@@ -219,13 +223,18 @@ def search_qdrant(
         user_input: The user's query.
         embedding_model: The embedding model used to encode the query.
         collection_name: The name of the Qdrant collection to search.
-        limit: The maximum number of results to retrieve. Default is 3.
+        limit: The maximum number of results to retrieve. Default is 2.
         query_vector: Precomputed query vector. When provided, `embedding_model`
             and `user_input` are not used to generate the vector.
 
     Returns:
         dict: A dictionary containing the retrieved policy text or a message if no results are found.
     """
+    cache_key = f"{collection_name}:{query_vector}"
+    if cache_key in _search_cache:
+        logging.info("Returning cached Qdrant result.")
+        return _search_cache[cache_key]
+
     logging.info("Connecting to Qdrant...")
     client_connection = QdrantClient(
         url=settings.qdrant.url,
@@ -261,9 +270,10 @@ def search_qdrant(
 
         policy_texts = [
             result.payload.get("text", "No text available")
-            for result in search_results[:2]
+            for result in search_results[:1]
         ]
-        response = {"answer": "\n\n".join(policy_texts)}
+        response = {"answer": policy_texts[0] if policy_texts else "No policy found."}
+        _search_cache[cache_key] = response
 
         logging.info("Successfully retrieved policy information from Qdrant.")
         return response
