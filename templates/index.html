@@ -1,0 +1,128 @@
+{% extends "base.html" %} {% block title %}PostalAI - Smart Postal Services{% endblock %} {% block content %}
+<main>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    Smarter Shipping, <br />
+                    <span class="gradient-text">Powered by AI</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Track packages, place orders, and get instant support — all in one
+                    place. Experience the future of postal services.
+                </p>
+                <div class="hero-buttons">
+                    <a href="/order" class="btn btn-primary btn-lg">Place an Order</a>
+                    <a href="/track" class="btn btn-outline btn-lg">Track Package</a>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="hero-card">
+                    <div class="hero-card-header">
+                        <span class="status-dot active"></span> Live Tracking
+                    </div>
+                    <div class="tracking-preview">
+                        <div class="tracking-item">
+                            <div class="tracking-icon">🚚</div>
+                            <div class="tracking-info">
+                                <strong>PKG784291</strong>
+                                <p>Out for Delivery • New York</p>
+                            </div>
+                        </div>
+                        <div class="tracking-item">
+                            <div class="tracking-icon">📦</div>
+                            <div class="tracking-info">
+                                <strong>PKG384721</strong>
+                                <p>In Transit • Chicago</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-header">
+                <h2>Everything You Need</h2>
+                <p>
+                    Our AI agent handles all your postal service needs with speed and
+                    accuracy.
+                </p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📦</div>
+                    <h3>Package Tracking</h3>
+                    <p>
+                        Get real-time updates on your shipments. Just enter your tracking
+                        code and we'll show you exactly where your package is.
+                    </p>
+                    <a href="/track" class="feature-link">Track Now →</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📋</div>
+                    <h3>Easy Ordering</h3>
+                    <p>
+                        Send packages anywhere in the world with our streamlined order
+                        process. Standard or express, we've got you covered.
+                    </p>
+                    <a href="/order" class="feature-link">Send a Package →</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Assistant</h3>
+                    <p>
+                        Chat with our intelligent assistant for instant answers about
+                        shipping, lost packages, and more.
+                    </p>
+                    <a href="/chat" class="feature-link">Chat Now →</a>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🔒</div>
+                    <h3>Lost Package Help</h3>
+                    <p>
+                        If your package is lost, our AI can guide you through the claims
+                        process step by step.
+                    </p>
+                    <a href="/lost" class="feature-link">Get Help →</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <h2>Ready to Send a Package?</h2>
+                <p>
+                    Get started in minutes. Enter your package details and we'll handle
+                    the rest.
+                </p>
+                <a href="/order" class="btn btn-white btn-lg">Start Your Order</a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %} {% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuBtn = document.getElementById("mobileMenuBtn");
+        const navLinks = document.getElementById("navLinks");
+        if (menuBtn && navLinks) {
+            menuBtn.addEventListener("click", () => {
+                navLinks.classList.toggle("active");
+            });
+            navLinks.querySelectorAll("a").forEach((link) => {
+                link.addEventListener("click", () => {
+                    navLinks.classList.remove("active");
+                });
+            });
+        }
+    });
+</script>
+{% endblock %}

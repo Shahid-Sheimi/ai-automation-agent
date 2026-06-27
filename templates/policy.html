@@ -1,0 +1,88 @@
+{% extends "base.html" %} {% block title %}Lost Package - PostalAI{% endblock %} {% block content %}
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1>Lost Package Policy</h1>
+            <p>Learn what to do if your package is lost or delayed.</p>
+        </div>
+    </section>
+
+    <section class="policy-section">
+        <div class="container policy-container">
+            <div class="policy-card highlight">
+                <h2>🚨 Immediate Steps if Your Package is Lost</h2>
+                <div class="policy-content">
+                    <ol>
+                        <li>
+                            <strong>Check tracking status:</strong> Use our tracking tool
+                            to see the latest updates. Sometimes packages show as "delayed"
+                            rather than lost.
+                        </li>
+                        <li>
+                            <strong>Wait 48 hours:</strong> Sometimes packages show
+                            tracking delays due to weather, customs, or carrier issues.
+                        </li>
+                        <li>
+                            <strong>Chat with our AI assistant:</strong> Get personalized
+                            guidance on the next steps based on your specific situation.
+                        </li>
+                        <li>
+                            <strong>File a formal claim:</strong> If the package is
+                            confirmed lost, you'll need to file a claim with all
+                            supporting documents.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="policy-grid">
+                <div class="policy-card">
+                    <h3>📋 Required Documents</h3>
+                    <div class="policy-content">
+                        <ul>
+                            <li>Proof of purchase / invoice</li>
+                            <li>Original tracking number</li>
+                            <li>Photo of package (if available)</li>
+                            <li>Government-issued ID</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="policy-card">
+                    <h3>⏱️ Claim Timeline</h3>
+                    <div class="policy-content">
+                        <ul>
+                            <li>Standard: Reviewed within 5-10 business days</li>
+                            <li>Express: Reviewed within 2-5 business days</li>
+                            <li>International: Reviewed within 10-20 business days</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="policy-card">
+                    <h3>💰 Compensation Policy</h3>
+                    <div class="policy-content">
+                        <p>
+                            Compensation amounts depend on the declared value and service
+                            type. For detailed information, chat with our AI assistant
+                            about your specific shipment.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="policy-card">
+                <h2>🤖 Get Personalized Help</h2>
+                <div class="policy-content">
+                    <p>
+                        Our AI assistant can guide you through the lost package process
+                        based on your specific situation, shipping type, and package
+                        value.
+                    </p>
+                    <a href="/chat" class="btn btn-primary btn-lg">Talk to AI Assistant</a>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

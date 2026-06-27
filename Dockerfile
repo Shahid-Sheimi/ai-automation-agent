@@ -24,6 +24,8 @@ RUN uv sync --frozen --no-cache
 # Copy your application code into the container
 COPY src/ /app/src
 COPY config/ /app/config
+COPY templates/ /app/templates
+COPY static/ /app/static
 
 # Set the virtual environment environment variables
 ENV VIRTUAL_ENV=/app/.venv \

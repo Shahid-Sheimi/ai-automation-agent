@@ -1,0 +1,91 @@
+{% extends "base.html" %} {% block title %}Track Package - PostalAI{% endblock %} {% block content %}
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1>Track Your Package</h1>
+            <p>Enter your tracking code to get real-time updates on your shipment.</p>
+        </div>
+    </section>
+
+    <section class="track-section">
+        <div class="container track-container">
+            <div class="track-form-card">
+                <form id="trackForm" class="track-form">
+                    <label for="trackingCode" class="form-label">Tracking Code</label>
+                    <div class="track-input-group">
+                        <input
+                        type="text"
+                        id="trackingCode"
+                        class="form-input"
+                        placeholder="e.g. PKG784291"
+                        required
+                        />
+                        <button type="submit" class="btn btn-primary">Track</button>
+                    </div>
+                    <p class="form-hint">Tracking codes start with "PKG" followed by numbers.</p>
+                </form>
+            </div>
+
+            <div id="trackResult" class="track-result hidden"></div>
+        </div>
+    </section>
+</main>
+{% endblock %} {% block scripts %}
+<script>
+    document.getElementById("trackForm").addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const code = document.getElementById("trackingCode").value.trim();
+        const resultDiv = document.getElementById("trackResult");
+        if (!code) return;
+
+        resultDiv.classList.remove("hidden");
+        resultDiv.innerHTML = '<div class="loading"><div class="spinner"></div><p>Searching for your package...</p></div>';
+
+        try {
+            const res = await fetch("/api/track", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ tracking_code: code }),
+            });
+            const data = await res.json();
+            if (res.ok) {
+                resultDiv.innerHTML = `
+                            <div class="tracking-success">
+                                <div class="tracking-header">
+                                    <h3>📦 Package Found</h3>
+                                    <span class="badge badge-info">${data.status}</span>
+                                </div>
+                                <div class="tracking-details">
+                                    <div class="detail-row">
+                                        <span class="detail-label">Tracking Code</span>
+                                        <span class="detail-value">${data.tracking_code}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Status</span>
+                                        <span class="detail-value">${data.status}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Location</span>
+                                        <span class="detail-value">${data.location}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Shipping Type</span>
+                                        <span class="detail-value">${data.shipping_type}</span>
+                                    </div>
+                                    <div class="detail-row">
+                                        <span class="detail-label">Last Update</span>
+                                        <span class="detail-value">${data.last_update}</span>
+                                    </div>
+                                </div>
+                            </div>`;
+            } else {
+                resultDiv.innerHTML =
+                    `<div class="tracking-error"><h3>❌ Not Found</h3><p>${data.detail || "No tracking information found for this code."}</p></div>`;
+            }
+        } catch (err) {
+            resultDiv.innerHTML =
+                '<div class="tracking-error"><h3>⚠️ Error</h3><p>Could not connect to tracking service.</p></div>';
+        }
+    });
+</script>
+{% endblock %}

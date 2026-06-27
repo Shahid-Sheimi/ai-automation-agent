@@ -15,9 +15,9 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 # ----------------------------
-# Qdrant client
+# Qdrant client (local file storage — no server needed)
 # ----------------------------
-qdrant_client = QdrantClient(url="http://localhost:6333")
+qdrant_client = QdrantClient(path="./qdrant_local_db")
 
 # ----------------------------
 # Text splitter
@@ -58,6 +58,9 @@ def ensure_collection(name: str):
                 distance=Distance.COSINE
             )
         )
+        print(f"Collection '{name}' created.")
+    else:
+        print(f"Collection '{name}' already exists, skipping creation.")
 
 
 # ----------------------------
@@ -67,6 +70,7 @@ def ingest(collection_name: str, content: str):
     ensure_collection(collection_name)
 
     chunks = text_splitter.split_text(content)
+    print(f"Ingesting {len(chunks)} chunks into '{collection_name}'...")
 
     points = []
     for chunk in chunks:
@@ -85,6 +89,7 @@ def ingest(collection_name: str, content: str):
         collection_name=collection_name,
         points=points
     )
+    print(f"✓ '{collection_name}' ingestion done.")
 
 
 # ----------------------------
@@ -102,4 +107,5 @@ with open("data/shipping_information.md", "r", encoding="utf-8") as f:
 # ----------------------------
 ingest("lost_package_policy", lost_content)
 ingest("shipping_information", shipping_content)
-print("Data ingestion completed successfully!")
+print("\nData ingestion completed successfully!")
+qdrant_client.close() 

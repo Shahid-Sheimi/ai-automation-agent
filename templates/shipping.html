@@ -1,0 +1,95 @@
+{% extends "base.html" %} {% block title %}Shipping Information - PostalAI{% endblock %} {% block content %}
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1>Shipping Information</h1>
+            <p>Everything you need to know about sending packages with us.</p>
+        </div>
+    </section>
+
+    <section class="policy-section">
+        <div class="container policy-container">
+            <div class="policy-card">
+                <h2>📋 Shipping Guidelines</h2>
+                <div class="policy-content">
+                    <h3>Standard Shipping</h3>
+                    <p>
+                        Standard shipping typically takes 5-10 business days for domestic
+                        deliveries and 10-30 business days for international deliveries.
+                        This is our most economical shipping option.
+                    </p>
+
+                    <h3>Express Shipping</h3>
+                    <p>
+                        Express shipping delivers your packages in 1-3 business days
+                        domestically and 3-10 business days internationally. Ideal for
+                        time-sensitive deliveries.
+                    </p>
+
+                    <h3>Package Requirements</h3>
+                    <ul>
+                        <li>Maximum weight: 30 kg</li>
+                        <li>Maximum dimensions: 120cm x 60cm x 60cm</li>
+                        <li>Proper packaging required to prevent damage</li>
+                        <li>Accurate address formatting is essential</li>
+                    </ul>
+
+                    <h3>Prohibited Items</h3>
+                    <ul>
+                        <li>Hazardous materials</li>
+                        <li>Perishable goods</li>
+                        <li>Illegal substances</li>
+                        <li>Live animals</li>
+                        <li>Cash and valuable documents (use specialized services)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="policy-card">
+                <h2>❓ Frequently Asked Questions</h2>
+                <div class="policy-content">
+                    <div class="faq-item">
+                        <h4>How do I calculate shipping costs?</h4>
+                        <p>
+                            Shipping costs are calculated based on package weight,
+                            dimensions, origin, destination, and shipping type. Use our
+                            order form or chat with our AI assistant for a quote.
+                        </p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Can I change the delivery address after shipping?</h4>
+                        <p>
+                            Address changes may be possible before delivery. Contact our
+                            support team as soon as possible with your tracking number.
+                        </p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>What happens if my package is damaged?</h4>
+                        <p>
+                            Report damaged packages within 48 hours of delivery. Take
+                            photos of the damaged package and its contents. Our support
+                            team will guide you through the claims process.
+                        </p>
+                    </div>
+                    <div class="faq-item">
+                        <h4>Do you offer pickup services?</h4>
+                        <p>
+                            Yes, we offer scheduled pickups for business and bulk
+                            shipments. Contact our sales team for pricing.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="policy-card cta-card">
+                <h2>Still Have Questions?</h2>
+                <p>
+                    Chat with our AI assistant for instant answers, or contact our
+                    support team.
+                </p>
+                <a href="/chat" class="btn btn-primary">Chat with AI</a>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}

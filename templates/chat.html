@@ -1,0 +1,127 @@
+{% extends "base.html" %} {% block title %}AI Assistant - PostalAI{% endblock %} {% block content %}
+<main>
+    <section class="page-header">
+        <div class="container">
+            <h1>AI Assistant</h1>
+            <p>
+                Chat with our intelligent assistant for instant help with tracking,
+                shipping, and lost packages.
+            </p>
+        </div>
+    </section>
+
+    <section class="chat-section">
+        <div class="container chat-container">
+            <div class="chat-window">
+                <div class="chat-header">
+                    <div class="chat-header-info">
+                        <div class="status-dot active"></div>
+                        <span>PostalAI Assistant</span>
+                    </div>
+                    <button class="btn btn-sm btn-outline" onclick="clearChat()">Clear Chat</button>
+                </div>
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot-message">
+                        <div class="message-bubble">
+                            <p>Hello! I'm your PostalAI assistant. How can I help you today? You can ask me to:</p>
+                            <ul>
+                                <li>Track a package ("Track PKG123456")</li>
+                                <li>Get shipping guidance</li>
+                                <li>Report a lost package</li>
+                                <li>Update your address or city</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <form id="chatForm" class="chat-input-form">
+                    <input
+                    type="text"
+                    id="chatInput"
+                    class="chat-input"
+                    placeholder="Type your message..."
+                    autocomplete="off"
+                />
+                <button type="submit" class="btn btn-primary">Send</button>
+            </form>
+        </div>
+    </div>
+</section>
+</main>
+{% endblock %} {% block scripts %}
+<script>
+    const chatMessages = document.getElementById("chatMessages");
+    const chatForm = document.getElementById("chatForm");
+    const chatInput = document.getElementById("chatInput");
+
+    chatForm.addEventListener("submit", async function (e) {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        addMessage(message, "user");
+        chatInput.value = "";
+        const loadingId = addLoading();
+
+        try {
+            const res = await fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message }),
+            });
+            const data = await res.json();
+            removeLoading(loadingId);
+            addMessage(data.response, "bot");
+        } catch (err) {
+            removeLoading(loadingId);
+            addMessage(
+                "Sorry, I'm having trouble connecting right now. Please try again.",
+                "bot",
+            );
+        }
+    });
+
+    function simpleMarkdown(text) {
+        return text
+            .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
+            .replace(/\*(.*?)\*/g, "<em>$1</em>")
+            .replace(/`(.*?)`/g, "<code>$1</code>")
+            .replace(/\n/g, "<br>");
+    }
+
+    function addMessage(text, sender) {
+        const div = document.createElement("div");
+        div.className = `message ${sender}-message`;
+        const bubble = document.createElement("div");
+        bubble.className = "message-bubble";
+        bubble.innerHTML = simpleMarkdown(text);
+        div.appendChild(bubble);
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    function addLoading() {
+        const id = "loading-" + Date.now();
+        const div = document.createElement("div");
+        div.className = "message bot-message";
+        div.id = id;
+        div.innerHTML =
+            '<div class="message-bubble"><div class="typing-indicator"><span></span><span></span><span></span></div></div>';
+        chatMessages.appendChild(div);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        return id;
+    }
+
+    function removeLoading(id) {
+        const el = document.getElementById(id);
+        if (el) el.remove();
+    }
+
+    function clearChat() {
+        chatMessages.innerHTML = "";
+        addMessage(
+            "Chat cleared. How can I help you today? You can ask me to track a package, get shipping info, or report a lost item.",
+            "bot",
+        );
+    }
+</script>
+{% endblock %}

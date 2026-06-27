@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Postal Service AI{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">📦</span>
+                <span class="logo-text">PostalAI</span>
+            </a>
+            <div class="mobile-menu-btn" id="mobileMenuBtn">
+                <span></span><span></span><span></span>
+            </div>
+            <div class="nav-links" id="navLinks">
+                <a href="/" class="nav-link">Home</a>
+                <a href="/track" class="nav-link">Track Package</a>
+                <a href="/order" class="nav-link">Place Order</a>
+                <a href="/shipping" class="nav-link">Shipping Info</a>
+                <a href="/lost" class="nav-link">Lost Packages</a>
+                <a href="/chat" class="nav-link btn btn-primary">AI Assistant</a>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}{% endblock %}
+
+    <footer class="footer">
+        <div class="container footer-container">
+            <div class="footer-brand">
+                <span class="logo-icon">📦</span>
+                <span class="logo-text">PostalAI</span>
+                <p>AI-powered postal services for the modern world.</p>
+            </div>
+            <div class="footer-links">
+                <div class="footer-col">
+                    <h4>Services</h4>
+                    <a href="/track">Track Package</a>
+                    <a href="/order">Place Order</a>
+                    <a href="/chat">AI Assistant</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="/shipping">Shipping Info</a>
+                    <a href="/lost">Lost Packages</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2026 PostalAI. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/static/js/main.js"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -7,7 +7,7 @@ from typing import Any, Dict
 from qdrant_client import QdrantClient
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
-
+import uuid
 from src.config import settings
 from src.utils.custom_logging import setup_logging
 
@@ -115,43 +115,80 @@ def save_interaction_to_db(question: str, response: str):
 def get_latest_tracking_info(tracking_code: str):
     """
     Retrieve the latest tracking information for a given tracking code.
+    Supports both:
+      - UUID format  → queries the `orders` table (order_id)
+      - PKGxxxxxx format → queries the `package_tracking` table (tracking_code)
 
     Args:
-        tracking_code (str): The package tracking code.
-        session (Session, optional): An existing SQLAlchemy session. If None, a new session is created.
+        tracking_code (str): The order UUID or package tracking code.
 
     Returns:
         dict or None: Tracking information if found, otherwise None.
     """
     logging.info("Fetching tracking information for: %s", tracking_code)
 
-    query = text(
-        """
-        SELECT last_update, location, status, shipping_type
-        FROM package_tracking
-        WHERE tracking_code = :tracking_code
-        ORDER BY last_update DESC
-        LIMIT 1
-    """
-    )
-
     SessionLocal = get_db_session()
 
-    # Use a context manager for session handling
     with SessionLocal() as session:
-        result = session.execute(query, {"tracking_code": tracking_code}).fetchone()
-        print("resultkkkkk...",result)
 
-    if result:
-        last_update, location, status, shipping_type = result
-        return {
-            "last_update": last_update,
-            "location": location,
-            "status": status,
-            "shipping_type": shipping_type,
-        }
-    else:
-        return None  # No record found
+        # ----------------------------
+        # Try orders table (UUID)
+        # ----------------------------
+        try:
+            uuid.UUID(tracking_code)  # validates if it's a UUID
+            order_query = text(
+                """
+                SELECT order_status, created_at, sender_city, shipping_type
+                FROM orders
+                WHERE order_id = :tracking_code
+                LIMIT 1
+                """
+            )
+            result = session.execute(
+                order_query, {"tracking_code": tracking_code}
+            ).fetchone()
+
+            if result:
+                order_status, created_at, sender_city, shipping_type = result
+                logging.info("Found order: %s", tracking_code)
+                return {
+                    "status": order_status,
+                    "last_update": created_at,
+                    "location": sender_city,
+                    "shipping_type": shipping_type,
+                }
+
+        except ValueError:
+            pass  # not a UUID — fall through to package_tracking
+
+        # ----------------------------
+        # Try package_tracking table (PKGxxxxxx)
+        # ----------------------------
+        package_query = text(
+            """
+            SELECT last_update, location, status, shipping_type
+            FROM package_tracking
+            WHERE tracking_code = :tracking_code
+            ORDER BY last_update DESC
+            LIMIT 1
+            """
+        )
+        result = session.execute(
+            package_query, {"tracking_code": tracking_code}
+        ).fetchone()
+
+        if result:
+            last_update, location, status, shipping_type = result
+            logging.info("Found package: %s", tracking_code)
+            return {
+                "last_update": last_update,
+                "location": location,
+                "status": status,
+                "shipping_type": shipping_type,
+            }
+
+    logging.warning("No record found for: %s", tracking_code)
+    return None  # not found in either table
 
 
 def query_to_update_users_data(user_id: uuid.UUID, reason: str, value_to_update: str):
